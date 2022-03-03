@@ -18,10 +18,12 @@ addButton.addEventListener('click', function () {
     todoList.push(newTodo);
     showMessages();
     localStorage.setItem('todo', JSON.stringify(todoList));
+    addMessage.value = '';
 });
 
 function showMessages() {
     let showMessage = "";
+    if (todoList.length === 0) todo.innerHTML = '';
     todoList.forEach(function (item, i) {
         showMessage += `
         <li>
@@ -39,6 +41,19 @@ todo.addEventListener('change', function (event) {
     todoList.forEach(function (item) {
         if (item.todo === valueLabel) {
             item.checked = !item.checked;
+            localStorage.setItem('todo', JSON.stringify(todoList));
+        }
+    })
+});
+// Задачу можно удалить зажав ctrl и нажав правой кнопкой на эту задачу
+todo.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+    todoList.forEach(function (item, i) {
+        if (item.todo === event.target.innerHTML) {
+            if (event.ctrlKey || event.innerHTML) {
+                todoList.splice(i, 1);
+            }
+            showMessages();
             localStorage.setItem('todo', JSON.stringify(todoList));
         }
     })
